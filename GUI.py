@@ -7,7 +7,7 @@ class MyWindow(QMainWindow):
     def __init__(self):
         super(MyWindow, self).__init__()
         self.setGeometry(200, 200, 300, 300)
-        self.setWindowTitle("PyQt5")
+        self.setWindowTitle("PyABP")
         self.setWindowIcon(QIcon("logo.jpg"))
         self.initUI()
 
