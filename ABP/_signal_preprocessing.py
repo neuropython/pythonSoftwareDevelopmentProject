@@ -1,11 +1,19 @@
+# -*- coding: utf-8 -*
+
 import biosppy
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
-matplotlib.use('Qt4Agg')
 
 
 class SignalPreprocessing:
+    """
+    @Author: Damian Pietroń,
+    @Contact: 275277@student.pwr.edu.pl,
+    @Licence: MIT,
+    @Version: 0.0.1,
+    @Last update: 03.01.2020r.
+    """
     """
     This class is used to preprocess the signal.
 
@@ -18,7 +26,7 @@ class SignalPreprocessing:
     -------
     filter()
         Removes noise from the signal.
-
+        
     remove_offsets()
         Smooths the signal.
 

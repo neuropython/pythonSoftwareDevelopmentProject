@@ -1,6 +1,10 @@
+# -*- coding: utf-8 -*
+
 import biosppy.signals.abp
 import numpy as np
-import pyhrv
+from matplotlib import pyplot as plt
+from sympy.physics.quantum.identitysearch import scipy
+from _signal_preprocessing import SignalPreprocessing as SP
 
 
 class TimeDomain:
@@ -44,9 +48,13 @@ class TimeDomain:
     SDHR()
         Calculates the Standard Deviation of HR (SDHR) of the signal.
     """
-    def __init__(self, time, signal):
+
+    def __init__(self, time, signal, sampling_frequency=200):
         self.time = time
-        self.signal = signal
+        self.signal = SP(signal).signal[0]
+        self.sampling_frequency = sampling_frequency
+        self.r_peaks = biosppy.signals.abp.abp(signal=self.signal, sampling_rate=200)[2]
+
 
     def RMSSD(self):
         """
@@ -179,8 +187,7 @@ class TimeDomain:
         None
 
         """
-        r_peaks = biosppy.signals.abp.abp(signal=self.signal, sampling_rate=200)[2]
-        return np.std(np.diff(r_peaks))
+        return np.std(np.diff(self.r_peaks))
 
     def mRR(self):
         """
@@ -199,8 +206,7 @@ class TimeDomain:
         None
 
         """
-        r_peaks = biosppy.signals.abp.abp(signal=self.signal, sampling_rate=200)[2]
-        return np.mean(np.diff(r_peaks))
+        return np.mean(np.diff(self.r_peaks))
 
     def mHRV(self):
         """
@@ -241,19 +247,40 @@ class TimeDomain:
         return 60 / np.std(self.signal)
 
 
-
 if __name__ == "__main__":
+    # Generate a time array
     time = np.arange(0, 10, 0.01)
-    signal = np.sin(time)
-    time_domain = TimeDomain(time, signal)
-    print(time_domain.RMSSD())
-    print(time_domain.SDNN())
-    print(time_domain.NN50())
-    print(time_domain.pNN50())
-    print(time_domain.NN20())
-    print(time_domain.pNN20())
-    print(time_domain.SDRR())
-    print(time_domain.mRR())
-    print(time_domain.mHRV())
-    print(time_domain.SDHR())
 
+    # Generate a synthetic "heart rate" signal
+    hr = 60 + 10 * np.sin(1 * np.pi * time) + 2 * np.random.randn(*time.shape)
+
+    # Convert heart rate to intervals between beats
+    rr_intervals = 60 / hr
+
+    # Generate a signal with beats
+    signal = scipy.signal.square(np.cumsum(rr_intervals) * 2 * np.pi)
+    signal = (signal + 1) / 2  # Scale to [0, 1]
+
+    plt.plot(time, signal)
+    plt.show()
+
+    # Create an instance of the class
+    time_domain = TimeDomain(time, signal)
+
+    print(f"{'':_^26}")
+    print(f"{'TIME DOMAIN TEST':_^26}")
+    print(f"{'':_^26}")
+    print("NN50 -> {}".format(time_domain.NN50()))
+    print("pNN50 -> {}".format(time_domain.pNN50()))
+
+    print("NN20 -> {}".format(time_domain.NN20()))
+    print("pNN20 -> {}".format(time_domain.pNN20()))
+
+    print("SDRR -> {}".format(time_domain.SDRR()))
+    print("mRR -> {}".format(time_domain.mRR()))
+    print("mHRV -> {}".format(time_domain.mHRV()))
+    print("SDHR -> {}".format(time_domain.SDHR()))
+    print("RMSSD -> {}".format(time_domain.RMSSD()))
+    print("SDNN -> {}".format(time_domain.SDNN()))
+    print(f"{'':_^26}")
+    print(f"{'END OF TEST':_^26}")

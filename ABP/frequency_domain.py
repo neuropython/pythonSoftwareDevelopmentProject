@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*
+import biosppy
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
-import pyhrv as hrv
+import pyhrv
+import _signal_preprocessing as SP
 
 
 class FrequencyDomain:
@@ -57,15 +60,41 @@ class FrequencyDomain:
     nHF()
         Calculates normalized power of the High Frequency (HF) band.
     """
+
     def __init__(self, signal, sampling_frequency, window_size, overlap):
-        self.signal = signal
+        print(signal)
+        self.signal = SP.SignalPreprocessing(signal).signal[0]
+        self.r_peaks = biosppy.signals.abp.abp(signal=self.signal, sampling_rate=200)[2]
         self.sampling_frequency = sampling_frequency
         self.window_size = window_size
         self.overlap = overlap
+        self._check_signal()
+
+    def _check_signal(self):
+        """
+        Checks if the signal is correct.
+
+        Parameters
+        ----------
+        self : FrequencyDomain
+
+        Returns
+        -------
+        None
+
+        Raises
+        ------
+        ValueError
+            If the signal is not correct.
+
+        """
+        if self.signal is None:
+            raise ValueError("Invalid signal.")
+
 
     def VLF(self):
         """
-       Calculates peak in a Very Low Frequency (VLF) band [Hz].
+       Calculates Absolute power of the very-low-frequency band (VLF) [ms^2].
 
         Parameters
         ----------
@@ -80,26 +109,16 @@ class FrequencyDomain:
         None
 
         """
-        return hrv.frequency_domain.welch_psd(
-            self.signal, self.sampling_frequency,
-            method='welch',
-            interp_freq=4,
-            window='hann',
-            nperseg=256,
-            noverlap=128,
-            nfft=None,
-            detrend='constant',
-            normalize=True,
-            skewness=True,
-            kurtosis=True,
+        return pyhrv.frequency_domain.welch_psd(
+            self.signal,
+            rpeaks = self.r_peaks,
             show=False,
             legend=False,
-            saveas=None,
-            show_param=False, )[0]
+            show_param=False, )["fft_abs"][0]
 
     def LF(self):
         """
-        Calculates peak in a Low Frequency (VLF) band [Hz].
+         Calculates Absolute power of the low-frequency band (LF) [ms^2].
 
         Parameters
         ----------
@@ -114,26 +133,15 @@ class FrequencyDomain:
         None
 
         """
-        return hrv.frequency_domain.welch_psd(
-            self.signal, self.sampling_frequency,
-            method='welch',
-            interp_freq=4,
-            window='hann',
-            nperseg=256,
-            noverlap=128,
-            nfft=None,
-            detrend='constant',
-            normalize=True,
-            skewness=True,
-            kurtosis=True,
+        return pyhrv.frequency_domain.welch_psd(
+            self.signal, self.r_peaks,
             show=False,
             legend=False,
-            saveas=None,
-            show_param=False, )[1]
+            show_param=False, )["fft_abs"][1]
 
     def HF(self):
         """
-        Calculates peak in a High Frequency (VLF) band [Hz].
+        Calculates Absolute power of the high-frequency band (HF) [ms^2].
 
         Parameters
         ----------
@@ -148,22 +156,11 @@ class FrequencyDomain:
         None
 
         """
-        return hrv.frequency_domain.welch_psd(
-            self.signal, self.sampling_frequency,
-            method='welch',
-            interp_freq=4,
-            window='hann',
-            nperseg=256,
-            noverlap=128,
-            nfft=None,
-            detrend='constant',
-            normalize=True,
-            skewness=True,
-            kurtosis=True,
+        return pyhrv.frequency_domain.welch_psd(
+            self.signal, self.r_peaks,
             show=False,
             legend=False,
-            saveas=None,
-            show_param=False, )[2]
+            show_param=False, )["fft_abs"][2]
 
     def LFHF(self):
         """
@@ -384,23 +381,30 @@ class FrequencyDomain:
 
 
 if __name__ == '__main__':
-    time = np.arange(0, 10, 0.01)
+    time = np.arange(0, 10, 0.1)
     signal = np.sin(time)
-    frequency_domain = FrequencyDomain(signal, 100, 256, 128)
-    print(frequency_domain.VLF())
-    print(frequency_domain.LF())
-    print(frequency_domain.HF())
-    print(frequency_domain.LFHF())
-    print(frequency_domain.pVLF())
-    print(frequency_domain.pLF())
-    print(frequency_domain.pHF())
-    print(frequency_domain.prcVLF())
-    print(frequency_domain.prcLF())
-    print(frequency_domain.prcHF())
-    print(frequency_domain.nLF())
-    print(frequency_domain.nHF())
+    frequency_domain = FrequencyDomain(signal, 200, 256, 128)
 
+    print(f"{'':_^26}")
+    print(f"{'FRQUENCY DOMAIN TEST':_^26}")
+    print(f"{'':_^26}")
 
+    print(f"VLF -> {frequency_domain.VLF()} [ms^2]")
+    print(f"Lf -> {frequency_domain.LF()} [ms^2]")
+    print(f"HF -> {frequency_domain.HF()} [ms^2]")
 
+    print(f"LF/HF -> {frequency_domain.LFHF()}")
 
+    print(f"pVLF -> {frequency_domain.pVLF()} [ms^2]")
+    print(f"pLF -> {frequency_domain.pLF()} [ms^2]")
+    print(f"pHF -> {frequency_domain.pHF()} [ms^2]")
 
+    print(f"prcVLF -> {frequency_domain.prcVLF()} [%]")
+    print(f"prcLF -> {frequency_domain.prcLF()} [%]")
+    print(f"prcHF -> {frequency_domain.prcHF()} [%]")
+
+    print(f"nLF -> {frequency_domain.nLF()}")
+    print(f"nHF -> {frequency_domain.nHF()}")
+
+    print(f"{'':_^26}")
+    print(f"{'END OF TEST':_^26}")
