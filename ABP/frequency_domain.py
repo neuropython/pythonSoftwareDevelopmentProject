@@ -4,6 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
 import pyhrv
+from sympy.physics.quantum.identitysearch import scipy
+
 import _signal_preprocessing as SP
 
 
@@ -62,7 +64,24 @@ class FrequencyDomain:
     """
 
     def __init__(self, signal, sampling_frequency, window_size, overlap):
-        print(signal)
+        """
+        Parameters
+        ----------
+        self : FrequencyDomain
+
+        signal : array
+            The signal (filtered).
+        sampling_frequency : int
+            The sampling frequency of the signal.
+        window_size : int
+            The size of the window.
+        overlap : int
+            The overlap of the window.
+
+        Returns
+        -------
+        None
+        """
         self.signal = SP.SignalPreprocessing(signal).signal[0]
         self.r_peaks = biosppy.signals.abp.abp(signal=self.signal, sampling_rate=200)[2]
         self.sampling_frequency = sampling_frequency
@@ -381,13 +400,24 @@ class FrequencyDomain:
 
 
 if __name__ == '__main__':
-    time = np.arange(0, 10, 0.1)
-    signal = np.sin(time)
+    time = np.arange(0, 10, 0.01)
+
+    # Generate a synthetic "heart rate" signal
+    hr = 60 + 10 * np.sin(1 * np.pi * time) + 2 * np.random.randn(*time.shape)
+
+    # Convert heart rate to intervals between beats
+    rr_intervals = 60 / hr
+
+    # Generate a signal with beats
+    signal = scipy.signal.square(np.cumsum(rr_intervals) * 2 * np.pi)
+    signal = (signal + 1) / 2  # Scale to [0, 1]
+
+    # Now you can use this signal as input to your FrequencyDomain object
     frequency_domain = FrequencyDomain(signal, 200, 256, 128)
 
-    print(f"{'':_^26}")
-    print(f"{'FRQUENCY DOMAIN TEST':_^26}")
-    print(f"{'':_^26}")
+    print(f"{'':#^26}")
+    print(f"{'FRQUENCY DOMAIN TEST':#^26}")
+    print(f"{'':#^26}")
 
     print(f"VLF -> {frequency_domain.VLF()} [ms^2]")
     print(f"Lf -> {frequency_domain.LF()} [ms^2]")
@@ -406,5 +436,5 @@ if __name__ == '__main__':
     print(f"nLF -> {frequency_domain.nLF()}")
     print(f"nHF -> {frequency_domain.nHF()}")
 
-    print(f"{'':_^26}")
-    print(f"{'END OF TEST':_^26}")
+    print(f"{'':#^26}")
+    print(f"{'END OF TEST':#^26}")

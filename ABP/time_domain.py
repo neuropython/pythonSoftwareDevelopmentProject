@@ -50,6 +50,20 @@ class TimeDomain:
     """
 
     def __init__(self, time, signal, sampling_frequency=200):
+        """
+        Parameters
+        ----------
+        time : array
+            The time vector of the signal.
+        signal : array
+            The signal (filtered).
+        sampling_frequency : int
+            The sampling frequency of the signal.
+
+        Returns
+        -------
+        None
+        """
         self.time = time
         self.signal = SP(signal).signal[0]
         self.sampling_frequency = sampling_frequency
