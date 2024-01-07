@@ -6,7 +6,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from sympy.physics.quantum.identitysearch import scipy
 from ABP._signal_preprocessing import SignalPreprocessing as SP
-
+import json
 
 class TimeDomain:
     """
@@ -50,16 +50,16 @@ class TimeDomain:
         Calculates the Standard Deviation of HR (SDHR) of the signal.
     """
 
-    def __init__(self, time, signal, sampling_frequency=200):
+    def __init__(self, signal, sampling_frequency=200, time = None):
         """
         Parameters
         ----------
         time : array
-            The time vector of the signal.
+            The time vector of the signal [ms].
         signal : array
             The signal (filtered).
         sampling_frequency : int
-            The sampling frequency of the signal.
+            The sampling frequency of the signal [Hz].
 
         Returns
         -------
@@ -70,7 +70,7 @@ class TimeDomain:
         self.sampling_frequency = sampling_frequency
         self.r_peaks = biosppy.signals.abp.abp(signal=self.signal, sampling_rate=200)[2]
 
-    def __call__(self, *args: Any, **kwds: Any) -> Any:
+    def __str__(self):
         """
         This method is used to call the class.
 
@@ -123,7 +123,8 @@ class TimeDomain:
             "SDHR": self.SDHR()
         }
 
-        return ReturnDict
+        json_dump = json.dumps(ReturnDict)
+        return json_dump
 
 
     def RMSSD(self):
@@ -335,7 +336,7 @@ if __name__ == "__main__":
     plt.show()
 
     # Create an instance of the class
-    time_domain = TimeDomain(time, signal)
+    time_domain = TimeDomain(time = time, signal = signal)
 
     print(f"{'':_^26}")
     print(f"{'TIME DOMAIN TEST':_^26}")

@@ -7,6 +7,8 @@ from scipy import signal
 import pyhrv
 from sympy.physics.quantum.identitysearch import scipy
 import ABP._signal_preprocessing as SP
+import json
+
 
 
 class FrequencyDomain:
@@ -85,10 +87,22 @@ class FrequencyDomain:
         self._calculate_power_in_band()
 
     def __str__(self):
-        string = (f'{{"VLF": {self.VLF}, "LF": {self.LF}, "HF": {self.HF}, "LFHF": {self.LFHF()}, '
-                  f'"pVLF": {self.pVLF()}, "pLF": {self.pLF()}, "pHF": {self.pHF()}, "prcVLF": {self.prcVLF()}, '
-                  f'"prcLF": {self.prcLF()}, "prcHF": {self.prcHF()}, "nLF": {self.nLF()}, "nHF": {self.nHF()}}}')
-        return string
+        data = {
+            "VLF": self.VLF,
+            "LF": self.LF,
+            "HF": self.HF,
+            "LFHF": self.LFHF(),
+            "pVLF": self.pVLF(),
+            "pLF": self.pLF(),
+            "pHF": self.pHF(),
+            "prcVLF": self.prcVLF(),
+            "prcLF": self.prcLF(),
+            "prcHF": self.prcHF(),
+            "nLF": self.nLF(),
+            "nHF": self.nHF()
+        }
+        return json.dumps(data)
+
 
     def _check_signal(self):
         """
