@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*
+
 from frequency_domain import FrequencyDomain as FD
 from _signal_preprocessing import SignalPreprocessing as SP
 from time_domain import TimeDomain as TD

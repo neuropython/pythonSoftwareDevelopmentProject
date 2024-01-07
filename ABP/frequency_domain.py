@@ -33,12 +33,6 @@ class FrequencyDomain:
         
     Methods
     -------
-    VLF()
-        Calculates peak in a Very Low Frequency (VLF) band [Hz].
-    LF()
-        Calculates peak in a Low Frequency (VLF) band [Hz].
-    HF()
-        Calculates peak in a High Frequency (VLF) band [Hz].
     LFHF()
         Calculates the LF/HF ratio of the signal.
     pVLF()
@@ -83,19 +77,18 @@ class FrequencyDomain:
         None
         """
         self.signal = SP.SignalPreprocessing(signal).signal[0]
-        self.r_peaks = biosppy.signals.abp.abp(signal=self.signal, sampling_rate=200, show = False)[2]
+        self.r_peaks = biosppy.signals.abp.abp(signal=self.signal, sampling_rate=200)[2]
         self.sampling_frequency = sampling_frequency
         self.window_size = window_size
         self.overlap = overlap
         self._check_signal()
-        self._calculate_power_in_band
+        self._calculate_power_in_band()
 
-
-    # def __str__(self):
-    #     string = (f'{{"VLF": {self.VLF()}, "LF": {self.LF()}, "HF": {self.HF()}, "LFHF": {self.LFHF()}, '
-    #           f'"pVLF": {self.pVLF()}, "pLF": {self.pLF()}, "pHF": {self.pHF()}, "prcVLF": {self.prcVLF()}, '
-    #           f'"prcLF": {self.prcLF()}, "prcHF": {self.prcHF()}, "nLF": {self.nLF()}, "nHF": {self.nHF()}}}')
-    #     return string
+    def __str__(self):
+        string = (f'{{"VLF": {self.VLF}, "LF": {self.LF}, "HF": {self.HF}, "LFHF": {self.LFHF()}, '
+                  f'"pVLF": {self.pVLF()}, "pLF": {self.pLF()}, "pHF": {self.pHF()}, "prcVLF": {self.prcVLF()}, '
+                  f'"prcLF": {self.prcLF()}, "prcHF": {self.prcHF()}, "nLF": {self.nLF()}, "nHF": {self.nHF()}}}')
+        return string
 
     def _check_signal(self):
         """
@@ -117,8 +110,8 @@ class FrequencyDomain:
         """
         if self.signal is None:
             raise ValueError("Invalid signal.")
-        
-    def _calculate_power_in_band(self, band_index):
+
+    def _calculate_power_in_band(self):
         """
         Calculates Absolute power of the specified frequency band.
 
@@ -145,8 +138,7 @@ class FrequencyDomain:
             legend=False,
             show_param=False,
         )
-        self.VLF, self.LF, self.HF =  psd_result["fft_abs"]
-
+        self.VLF, self.LF, self.HF = psd_result["fft_abs"]
 
     def LFHF(self):
         """
@@ -204,7 +196,7 @@ class FrequencyDomain:
         None
 
         """
-        return self.VLF() + self.LF() + self.HF()
+        return self.VLF + self.LF + self.HF
 
     def pLF(self):
         """
@@ -223,7 +215,7 @@ class FrequencyDomain:
         None
 
         """
-        return self.LF() / self._total_power()
+        return self.LF / self._total_power()
 
     def pHF(self):
         """
@@ -242,7 +234,7 @@ class FrequencyDomain:
         None
 
         """
-        return self.HF() / self._total_power()
+        return self.HF / self._total_power()
 
     def prcVLF(self):
         """
@@ -344,7 +336,7 @@ class FrequencyDomain:
         None
 
         """
-        return self.LF() / (self.LF() + self.HF())
+        return self.LF / (self.LF + self.HF)
 
     def nHF(self):
         """
@@ -363,7 +355,7 @@ class FrequencyDomain:
         None
 
         """
-        return self.HF() / (self.LF() + self.HF())
+        return self.HF / (self.LF + self.HF)
 
 
 if __name__ == '__main__':
@@ -377,7 +369,9 @@ if __name__ == '__main__':
 
     # Generate a signal with beats
     signal = scipy.signal.square(np.cumsum(rr_intervals) * 2 * np.pi)
+
     signal = (signal + 1) / 2  # Scale to [0, 1]
+
 
     # Now you can use this signal as input to your FrequencyDomain object
     frequency_domain = FrequencyDomain(signal, 200, 256, 128)
@@ -386,9 +380,9 @@ if __name__ == '__main__':
     print(f"{'FRQUENCY DOMAIN TEST':#^26}")
     print(f"{'':#^26}")
 
-    print(f"VLF -> {frequency_domain.VLF()} [ms^2]")
-    print(f"Lf -> {frequency_domain.LF()} [ms^2]")
-    print(f"HF -> {frequency_domain.HF()} [ms^2]")
+    print(f"VLF -> {frequency_domain.VLF} [ms^2]")
+    print(f"Lf -> {frequency_domain.LF} [ms^2]")
+    print(f"HF -> {frequency_domain.HF} [ms^2]")
 
     print(f"LF/HF -> {frequency_domain.LFHF()}")
 

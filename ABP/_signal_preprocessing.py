@@ -60,7 +60,7 @@ class SignalPreprocessing:
             band='bandpass',
             order=int(0.3 * 100),
             frequency=[0.5, 40],
-            sampling_rate=100,
+            sampling_rate=200,
         )
 
     def remove_offsets(self):
