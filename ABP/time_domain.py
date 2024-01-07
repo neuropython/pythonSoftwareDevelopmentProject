@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*
 
+from typing import Any
 import biosppy.signals.abp
 import numpy as np
 from matplotlib import pyplot as plt
 from sympy.physics.quantum.identitysearch import scipy
-from _signal_preprocessing import SignalPreprocessing as SP
+from ABP._signal_preprocessing import SignalPreprocessing as SP
 
 
 class TimeDomain:
@@ -13,7 +14,7 @@ class TimeDomain:
     @Contact: 275277@student.pwr.edu.pl,
     @Licence: MIT,
     @Version: 0.0.1,
-    @Last update: 03.01.2020r.
+    @Last update: 06.01.2024r.
     """
     """
     This class is used to calculate time domain parameters.
@@ -68,6 +69,61 @@ class TimeDomain:
         self.signal = SP(signal).signal[0]
         self.sampling_frequency = sampling_frequency
         self.r_peaks = biosppy.signals.abp.abp(signal=self.signal, sampling_rate=200)[2]
+
+    def __call__(self, *args: Any, **kwds: Any) -> Any:
+        """
+        This method is used to call the class.
+
+        Parameters
+        ----------
+        args : Any
+            Any arguments.
+        kwds : Any
+            Any keyword arguments.
+
+        Returns
+        -------
+        dict
+            Dictionary with time domain parameters.
+        
+        Keys and values:
+        ----------------
+        RMSSD -> float [ms] 
+            The RMSSD of the signal.
+        SDNN -> float [ms]
+            The SDNN of the signal.
+        NN50 -> int [n]
+            The number of NN50 intervals of the signal.
+        pNN50 -> float [%]
+            The percentage of NN50 intervals of the signal.
+        NN20 -> int [n]
+            The number of NN20 intervals of the signal.
+        pNN20 -> float [%]
+            The percentage of NN20 intervals of the signal.
+        SDRR -> float [ms]
+            The SDRR of the signal.
+        mRR -> float [ms]
+            The mRR of the signal.
+        mHRV -> float [1/min]
+            The mHRV of the signal.
+        SDHR -> float [1/min]
+            The SDHR of the signal.
+        """
+
+        ReturnDict = {
+            "RMSSD": self.RMSSD(),
+            "SDNN": self.SDNN(),
+            "NN50": self.NN50(),
+            "pNN50": self.pNN50(),
+            "NN20": self.NN20(),
+            "pNN20": self.pNN20(),
+            "SDRR": self.SDRR(),
+            "mRR": self.mRR(),
+            "mHRV": self.mHRV(),
+            "SDHR": self.SDHR()
+        }
+
+        return ReturnDict
 
 
     def RMSSD(self):

@@ -12,7 +12,7 @@ class SignalPreprocessing:
     @Contact: 275277@student.pwr.edu.pl,
     @Licence: MIT,
     @Version: 0.0.1,
-    @Last update: 03.01.2020r.
+    @Last update: 06.01.2024r.
     """
     """
     This class is used to preprocess the signal.
@@ -85,6 +85,7 @@ class SignalPreprocessing:
             kernel='boxzen',
             size=int(0.1 * 100),
             mirror=True,
+            show=False,
         )
 
 

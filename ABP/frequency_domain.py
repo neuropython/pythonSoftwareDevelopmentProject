@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*
+from typing import Any
 import biosppy
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
 import pyhrv
 from sympy.physics.quantum.identitysearch import scipy
-
-import _signal_preprocessing as SP
+import ABP._signal_preprocessing as SP
 
 
 class FrequencyDomain:
@@ -15,7 +15,7 @@ class FrequencyDomain:
     @Contact: 275277@student.pwr.edu.pl,
     @Licence: MIT,
     @Version: 0.0.1,
-    @Last update: 03.01.2020r.
+    @Last update: 06.01.2024r.
     """
     """
     This class is used to calculate frequency domain parameters.
@@ -83,11 +83,19 @@ class FrequencyDomain:
         None
         """
         self.signal = SP.SignalPreprocessing(signal).signal[0]
-        self.r_peaks = biosppy.signals.abp.abp(signal=self.signal, sampling_rate=200)[2]
+        self.r_peaks = biosppy.signals.abp.abp(signal=self.signal, sampling_rate=200, show = False)[2]
         self.sampling_frequency = sampling_frequency
         self.window_size = window_size
         self.overlap = overlap
         self._check_signal()
+        self._calculate_power_in_band
+
+
+    # def __str__(self):
+    #     string = (f'{{"VLF": {self.VLF()}, "LF": {self.LF()}, "HF": {self.HF()}, "LFHF": {self.LFHF()}, '
+    #           f'"pVLF": {self.pVLF()}, "pLF": {self.pLF()}, "pHF": {self.pHF()}, "prcVLF": {self.prcVLF()}, '
+    #           f'"prcLF": {self.prcLF()}, "prcHF": {self.prcHF()}, "nLF": {self.nLF()}, "nHF": {self.nHF()}}}')
+    #     return string
 
     def _check_signal(self):
         """
@@ -109,77 +117,36 @@ class FrequencyDomain:
         """
         if self.signal is None:
             raise ValueError("Invalid signal.")
-
-
-    def VLF(self):
+        
+    def _calculate_power_in_band(self, band_index):
         """
-       Calculates Absolute power of the very-low-frequency band (VLF) [ms^2].
+        Calculates Absolute power of the specified frequency band.
 
         Parameters
         ----------
         self : FrequencyDomain
+        band_index : int
+            Index of the frequency band.
 
         Returns
         -------
-        float: The VLF power of the signal.
+        float
+            The power of the specified frequency band.
 
         Raises
         ------
-        None
-
+        ValueError
+            If the band_index is invalid.
         """
-        return pyhrv.frequency_domain.welch_psd(
+        psd_result = pyhrv.frequency_domain.welch_psd(
             self.signal,
-            rpeaks = self.r_peaks,
+            rpeaks=self.r_peaks,
             show=False,
             legend=False,
-            show_param=False, )["fft_abs"][0]
+            show_param=False,
+        )
+        self.VLF, self.LF, self.HF =  psd_result["fft_abs"]
 
-    def LF(self):
-        """
-         Calculates Absolute power of the low-frequency band (LF) [ms^2].
-
-        Parameters
-        ----------
-        self : FrequencyDomain
-
-        Returns
-        -------
-        float: The LF power of the signal.
-
-        Raises
-        ------
-        None
-
-        """
-        return pyhrv.frequency_domain.welch_psd(
-            self.signal, self.r_peaks,
-            show=False,
-            legend=False,
-            show_param=False, )["fft_abs"][1]
-
-    def HF(self):
-        """
-        Calculates Absolute power of the high-frequency band (HF) [ms^2].
-
-        Parameters
-        ----------
-        self : FrequencyDomain
-
-        Returns
-        -------
-        float: The HF power of the signal.
-
-        Raises
-        ------
-        None
-
-        """
-        return pyhrv.frequency_domain.welch_psd(
-            self.signal, self.r_peaks,
-            show=False,
-            legend=False,
-            show_param=False, )["fft_abs"][2]
 
     def LFHF(self):
         """
@@ -198,7 +165,7 @@ class FrequencyDomain:
         None
 
         """
-        return self.LF() / self.HF()
+        return self.LF / self.HF
 
     def pVLF(self):
         """
@@ -218,7 +185,7 @@ class FrequencyDomain:
 
         """
 
-        return self.VLF() / self._total_power()
+        return self.VLF / self._total_power()
 
     def _total_power(self):
         """
