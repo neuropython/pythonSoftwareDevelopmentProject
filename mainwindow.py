@@ -2,7 +2,7 @@
 import sys
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel
-from PySide6.QtCore import Slot
+from PySide6.QtCore import Slot, Qt
 from ui_form import Ui_MainWindow
 
 
@@ -21,6 +21,9 @@ class MainWindow(QMainWindow):
         self.connect_action()
         self.to_analyze = []
         self.label = QLabel()
+        self.label.setAlignment(Qt.AlignCenter)
+        self.label.setStyleSheet("font-size: 20px;")
+        self.ui.scrollArea.setWidget(self.label)
 
     def buttons(self):
         self.pushButton = QPushButton(self.centralwidget)
@@ -28,13 +31,11 @@ class MainWindow(QMainWindow):
 
     def check_values(self):
         if len(self.to_analyze) == 0:
-            self.label.setText("Your text message here")
-            self.ui.scrollArea.setWidget(label)
-            print("No values to analyze")
+            self.label.setText("No values to compute")
 
         else:
             print(self.to_analyze)
-
+            self.label.setText("The computed domains are " + ", ".join([str(n) for n in self.to_analyze]))
     def connect_checkbox(self):
         self.ui.time_checkbox.stateChanged.connect(self.on_time_checkbox_state_changed)
         self.ui.frequency_checkbox.stateChanged.connect(self.on_frequency_checkbox_state_changed)
