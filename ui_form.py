@@ -27,6 +27,12 @@ class Ui_MainWindow(object):
             MainWindow.setObjectName(u"pyABP")
             MainWindow.setWindowTitle(u"pyABP")
         MainWindow.resize(800, 765)
+        MainWindow.setStyleSheet("""
+            QMainWindow {
+                border-radius: 10px;
+            }
+        """)
+
         self.actionClose = QAction(MainWindow)
         self.actionClose.setObjectName(u"actionClose")
         self.actionSave_to_file = QAction(MainWindow)
@@ -67,28 +73,28 @@ class Ui_MainWindow(object):
         self.time_checkbox.setGeometry(QRect(30, 220, 101, 21))
         self.frequency_checkbox = QCheckBox(self.centralwidget)
         self.frequency_checkbox.setObjectName(u"frequency_checkbox")
-        self.frequency_checkbox.setGeometry(QRect(210, 220, 131, 21))
+        self.frequency_checkbox.setGeometry(QRect(200, 220, 140, 21))
         self.samplingRate = QLabel(self.centralwidget)
         self.samplingRate.setObjectName(u"samplingRate")
         self.samplingRate.setGeometry(QRect(30, 100, 91, 16))
         self.samplingRateEditTxt = QTextEdit(self.centralwidget)
         self.samplingRateEditTxt.setObjectName(u"samplingRateEditTxt")
-        self.samplingRateEditTxt.setGeometry(QRect(170, 100, 171, 21))
+        self.samplingRateEditTxt.setGeometry(QRect(170, 98, 171, 25))
         self.fileNames = QLabel(self.centralwidget)
         self.fileNames.setObjectName(u"fileNames")
-        self.fileNames.setGeometry(QRect(30, 130, 101, 16))
+        self.fileNames.setGeometry(QRect(30, 130, 120, 16))
         self.fileNamesEditTxt = QTextEdit(self.centralwidget)
         self.fileNamesEditTxt.setObjectName(u"fileNamesEditTxt")
-        self.fileNamesEditTxt.setGeometry(QRect(170, 130, 171, 21))
+        self.fileNamesEditTxt.setGeometry(QRect(170, 128, 171, 25))
         self.windowSize = QLabel(self.centralwidget)
         self.windowSize.setObjectName(u"label_5")
         self.windowSize.setGeometry(QRect(30, 160, 101, 16))
         self.windowSizeEditTxt = QTextEdit(self.centralwidget)
         self.windowSizeEditTxt.setObjectName(u"windowSizeEditTxt")
-        self.windowSizeEditTxt.setGeometry(QRect(170, 160, 171, 21))
+        self.windowSizeEditTxt.setGeometry(QRect(170, 158, 171, 25))
         self.overlapEditTxt = QTextEdit(self.centralwidget)
         self.overlapEditTxt.setObjectName(u"overlapEditTxt")
-        self.overlapEditTxt.setGeometry(QRect(170, 190, 171, 21))
+        self.overlapEditTxt.setGeometry(QRect(170, 188, 171, 25))
         self.overlapTxt = QLabel(self.centralwidget)
         self.overlapTxt.setObjectName(u"label_6")
         self.overlapTxt.setGeometry(QRect(30, 190, 101, 16))
@@ -127,6 +133,118 @@ class Ui_MainWindow(object):
         self.overlapEditTxt.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.overlapEditTxt.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
+        font = QFont("Cascadia Code", 9)  # Specify the font size here
+
+        self.time_checkbox.setFont(font)
+        self.time_checkbox.setStyleSheet("""        
+            QCheckBox::indicator {
+                width: 13px;
+                height: 13px;
+                border: 1px solid #565C63; /* Add border */
+            }
+            QCheckBox::indicator:unchecked {
+                background-color: #1B1D1F;
+            }
+            QCheckBox::indicator:checked {
+                background-color: #246ED9;
+            }
+            QCheckBox {
+                color: #565C63; /* Adjust text color */
+            }       
+        """)
+
+        self.frequency_checkbox.setFont(font)
+        self.frequency_checkbox.setStyleSheet("""
+            QCheckBox::indicator {
+                width: 13px;
+                height: 13px;
+                border: 1px solid #565C63; /* Add border */
+            }
+            QCheckBox::indicator:unchecked {
+                background-color: #1B1D1F;
+            }
+            QCheckBox::indicator:checked {
+                background-color: #246ED9;
+            }
+            QCheckBox {
+                color: #565C63; /* Adjust text color */
+            }
+        """)
+
+        MainWindow.setFont(font)
+        MainWindow.setStyleSheet("""
+            QMainWindow {
+                background-color: #1B1D1F;
+                border: 1px solid;
+                border-radius: 10px;
+                color: #DDDDDD;
+            }
+        """)
+
+        font1 = QFont()
+        font1.setFamilies("Poppins")
+        font1.setBold(True)
+
+        font1.setPointSize(12)
+        self.analyze_button.setFont(font1)
+        self.analyze_button.setStyleSheet("""
+        background-color: #246ED9;
+        color: #DDDDDD;
+        border: 1px solid;
+        border-radius: 10px;
+        """)
+
+        font = QFont("Cascadia Code")
+        font1.setPointSize(12)
+
+        self.samplingRateEditTxt.setFont(font)
+        self.samplingRateEditTxt.setStyleSheet("color: #665C63;")
+
+        self.fileNamesEditTxt.setFont(font)
+        self.fileNamesEditTxt.setStyleSheet("color: #665C63;")
+
+        self.windowSizeEditTxt.setFont(font)
+        self.windowSizeEditTxt.setStyleSheet("color: #665C63;")
+
+        self.overlapEditTxt.setFont(font)
+        self.overlapEditTxt.setStyleSheet("color: #565C63;")
+
+        self.title.setFont(font)
+        self.title.setStyleSheet("color: #565C63;")
+
+        self.specifyValuesFor.setFont(font)
+        self.specifyValuesFor.setStyleSheet("color: #565C63;")
+
+        self.samplingRate.setFont(font)
+        self.samplingRate.setStyleSheet("color: #565C63;")
+
+        self.fileNames.setFont(font)
+        self.fileNames.setStyleSheet("color: #565C63;")
+
+        self.windowSize.setFont(font)
+        self.windowSize.setStyleSheet("color: #565C63;")
+
+        self.overlapTxt.setFont(font)
+        self.overlapTxt.setStyleSheet("color: #565C63;")
+
+        self.samplingRateEditTxt.setStyleSheet("background-color: #1B1D1F;")
+        self.fileNamesEditTxt.setStyleSheet("background-color: #1B1D1F;")
+        self.windowSizeEditTxt.setStyleSheet("background-color: #1B1D1F;")
+        self.overlapEditTxt.setStyleSheet("background-color: #1B1D1F;")
+
+        font = QFont("Cascadia Code")
+        font.setBold(True)
+        font.setPointSize(12)
+        self.plainTextEdit.setFont(font)
+        self.plainTextEdit.setPlaceholderText(
+            QCoreApplication.translate("MainWindow", u' Drag and Drop paths here ', None))
+        self.plainTextEdit.setStyleSheet("""
+            color: #00ff00;
+            background-color: #17191B;
+        """)
+
+        self.scrollArea.setStyleSheet("background-color: #17191B;")
+
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
 
@@ -135,14 +253,15 @@ class Ui_MainWindow(object):
         self.actionClose.setText(QCoreApplication.translate("MainWindow", u"Close", None))
         self.actionSave_to_file.setText(QCoreApplication.translate("MainWindow", u"Save to file ", None))
         self.title.setText(QCoreApplication.translate("MainWindow", u"Brain Lab ABP analysis Software", None))
-        self.plainTextEdit.setPlainText(QCoreApplication.translate("MainWindow", u"Drag and Drop paths here ", None))
+        self.plainTextEdit.setPlaceholderText(
+            QCoreApplication.translate("MainWindow", u"Drag and Drop paths here ", None))
         self.specifyValuesFor.setText(QCoreApplication.translate("MainWindow", u"Specify values for:", None))
         self.time_checkbox.setText(QCoreApplication.translate("MainWindow", u"Time Domain", None))
         self.frequency_checkbox.setText(QCoreApplication.translate("MainWindow", u"Frequency Domain", None))
         self.samplingRate.setText(QCoreApplication.translate("MainWindow", u"Sampling rate", None))
-        self.fileNames.setText(QCoreApplication.translate("MainWindow", u"Names of the files", None))
-        self.windowSize.setText(QCoreApplication.translate("MainWindow", u"window_size", None))
-        self.overlapTxt.setText(QCoreApplication.translate("MainWindow", u"overlap", None))
+        self.fileNames.setText(QCoreApplication.translate("MainWindow", u"Names of the rows", None))
+        self.windowSize.setText(QCoreApplication.translate("MainWindow", u"Window size", None))
+        self.overlapTxt.setText(QCoreApplication.translate("MainWindow", u"Overlap", None))
         self.analyze_button.setText(QCoreApplication.translate("MainWindow", u"Analize", None))
         self.menuAnalize.setTitle(QCoreApplication.translate("MainWindow", u"Analize", None))
         self.menuHow_to_use.setTitle(QCoreApplication.translate("MainWindow", u"How to use", None))
