@@ -109,8 +109,8 @@ class PathHandler:
 
 
 if __name__ == "__main__":
-    path = r"example_data"
-    names = ['abp_finger_mm_hg_[abp_finger_mm_Hg_]']
+    path = r"C:\Users\damia\OneDrive\Pulpit\data"
+    names = ['abp_finger_mm_hg_[abp_finger_mm_Hg_]', 'ekg__[ekg__]']
     ph = PathHandler(path, names)
     print(ph.signals)
     print(ph.all_alaized_files_names)

@@ -37,8 +37,7 @@ class Ui_MainWindow(object):
         self.title = QLabel(self.centralwidget)
         self.title.setObjectName(u"title")
         self.title.setEnabled(True)
-        self.title.setGeometry(QRect(30, 10, 731, 61))
-        self.title.setStyleSheet("background-color: #246ED9;")
+        self.title.setGeometry(QRect(30, 5, 731, 61))
         font = QFont()
         font.setFamilies([u"Cascadia Code"])
         font.setPointSize(28)
@@ -46,6 +45,8 @@ class Ui_MainWindow(object):
         self.title.setLayoutDirection(Qt.LeftToRight)
         self.title.setMidLineWidth(0)
         self.title.setAlignment(Qt.AlignCenter)
+        self.title.setStyleSheet("color: #00ff00;")
+
         self.scrollArea = QScrollArea(self.centralwidget)
         self.scrollArea.setObjectName(u"scrollArea")
         self.scrollArea.setGeometry(QRect(30, 330, 731, 381))
@@ -214,18 +215,16 @@ class Ui_MainWindow(object):
         self.fileNames.setFont(font)
         self.fileNames.setStyleSheet("color: #565C63;")
 
-        self.title.setStyleSheet("color: #565C63;")
-
         self.windowSize.setFont(font)
         self.windowSize.setStyleSheet("color: #565C63;")
 
         self.overlapTxt.setFont(font)
         self.overlapTxt.setStyleSheet("color: #565C63;")
 
-        self.samplingRateEditTxt.setStyleSheet("background-color: #1B1D1F;")
-        self.fileNamesEditTxt.setStyleSheet("background-color: #1B1D1F;")
-        self.windowSizeEditTxt.setStyleSheet("background-color: #1B1D1F;")
-        self.overlapEditTxt.setStyleSheet("background-color: #1B1D1F;")
+        self.samplingRateEditTxt.setStyleSheet("background-color: #1B1D1F; color: #00ff00;")
+        self.fileNamesEditTxt.setStyleSheet("background-color: #1B1D1F; color: #00ff00;")
+        self.windowSizeEditTxt.setStyleSheet("background-color: #1B1D1F; color: #00ff00;")
+        self.overlapEditTxt.setStyleSheet("background-color: #1B1D1F; color: #00ff00;")
 
         font = QFont("Cascadia Code")
         font.setBold(True)
@@ -256,7 +255,7 @@ class Ui_MainWindow(object):
 
         self.scrollArea.setStyleSheet("background-color: #17191B;")
 
-        self.title.setStyleSheet("background-color: #1B1D1F;")
+        self.title.setStyleSheet("color: #00ff00;")
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
@@ -268,7 +267,7 @@ class Ui_MainWindow(object):
         self.title.setText(QCoreApplication.translate("MainWindow", u"Brain Lab ABP analysis Software", None))
         self.plainTextEdit.setPlaceholderText(
             QCoreApplication.translate("MainWindow", u"Drag and Drop paths here ", None))
-        self.specifyValuesFor.setText(QCoreApplication.translate("MainWindow", u"Specify values for:", None))
+        self.specifyValuesFor.setText(QCoreApplication.translate("MainWindow", u"Specify values", None))
         self.time_checkbox.setText(QCoreApplication.translate("MainWindow", u"Time Domain", None))
         self.frequency_checkbox.setText(QCoreApplication.translate("MainWindow", u"Frequency Domain", None))
         self.samplingRate.setText(QCoreApplication.translate("MainWindow", u"Sampling rate", None))
