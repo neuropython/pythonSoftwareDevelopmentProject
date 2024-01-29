@@ -1,22 +1,26 @@
 # This Python file uses the following encoding: utf-8
 import sys
 
-from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
+from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel
 from PySide6.QtCore import Slot
 from ui_form import Ui_MainWindow
 
+
+from path_handler import PathHandler
+from ABP.time_domain import TimeDomain
+from ABP.frequency_domain import FrequencyDomain
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.centralwidget = None
         self.ui = Ui_MainWindow()
-        self.setWindowTitle("PyABP")
         self.ui.setupUi(self)
         self.buttons()
         self.connect_checkbox()
         self.connect_action()
         self.to_analyze = []
+        self.label = QLabel()
 
     def buttons(self):
         self.pushButton = QPushButton(self.centralwidget)
@@ -24,7 +28,10 @@ class MainWindow(QMainWindow):
 
     def check_values(self):
         if len(self.to_analyze) == 0:
+            self.label.setText("Your text message here")
+            self.ui.scrollArea.setWidget(label)
             print("No values to analyze")
+
         else:
             print(self.to_analyze)
 

@@ -3,11 +3,12 @@ from typing import Any
 import biosppy
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy import signal as ss
+from scipy import signal
 import pyhrv
+from sympy.physics.quantum.identitysearch import scipy
 import ABP._signal_preprocessing as SP
 import json
-import scipy
+
 
 
 class FrequencyDomain:
@@ -78,10 +79,7 @@ class FrequencyDomain:
         None
         """
         self.signal = SP.SignalPreprocessing(signal).signal[0]
-        # self.r_peaks = biosppy.signals.abp.abp(signal=self.signal, sampling_rate=200)[2]
-        self.r_peaks = ss.find_peaks(x=self.signal)
-        # plt.plot(self.signal)
-        plt.show()
+        self.r_peaks = biosppy.signals.abp.abp(signal=self.signal, sampling_rate=200)[2]
         self.sampling_frequency = sampling_frequency
         self.window_size = window_size
         self.overlap = overlap

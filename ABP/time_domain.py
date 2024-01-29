@@ -7,6 +7,8 @@ from matplotlib import pyplot as plt
 from sympy.physics.quantum.identitysearch import scipy
 from ABP._signal_preprocessing import SignalPreprocessing as SP
 import json
+import scipy.signal as ss
+
 
 class TimeDomain:
     """
@@ -68,7 +70,7 @@ class TimeDomain:
         self.time = time
         self.signal = SP(signal).signal[0]
         self.sampling_frequency = sampling_frequency
-        self.r_peaks = biosppy.signals.abp.abp(signal=self.signal, sampling_rate=200)[2]
+        self.r_peaks = ss.find_peaks(self.signal, distance=200)[0]
 
     def __str__(self):
         """
