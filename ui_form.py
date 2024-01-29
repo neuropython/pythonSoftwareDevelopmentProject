@@ -27,24 +27,20 @@ class Ui_MainWindow(object):
             MainWindow.setObjectName(u"pyABP")
             MainWindow.setWindowTitle(u"pyABP")
         MainWindow.resize(800, 765)
-        MainWindow.setStyleSheet("""
-            QMainWindow {
-                border-radius: 10px;
-            }
-        """)
-
         self.actionClose = QAction(MainWindow)
         self.actionClose.setObjectName(u"actionClose")
         self.actionSave_to_file = QAction(MainWindow)
         self.actionSave_to_file.setObjectName(u"actionSave_to_file")
         self.centralwidget = QWidget(MainWindow)
+
         self.centralwidget.setObjectName(u"centralwidget")
         self.title = QLabel(self.centralwidget)
         self.title.setObjectName(u"title")
         self.title.setEnabled(True)
         self.title.setGeometry(QRect(30, 10, 731, 61))
+        self.title.setStyleSheet("background-color: #246ED9;")
         font = QFont()
-        font.setFamilies([u"Tw Cen MT Condensed Extra Bold"])
+        font.setFamilies([u"Cascadia Code"])
         font.setPointSize(28)
         self.title.setFont(font)
         self.title.setLayoutDirection(Qt.LeftToRight)
@@ -177,9 +173,9 @@ class Ui_MainWindow(object):
                 background-color: #1B1D1F;
                 border: 1px solid;
                 border-radius: 10px;
-                color: #DDDDDD;
             }
         """)
+
 
         font1 = QFont()
         font1.setFamilies("Poppins")
@@ -209,9 +205,6 @@ class Ui_MainWindow(object):
         self.overlapEditTxt.setFont(font)
         self.overlapEditTxt.setStyleSheet("color: #565C63;")
 
-        self.title.setFont(font)
-        self.title.setStyleSheet("color: #565C63;")
-
         self.specifyValuesFor.setFont(font)
         self.specifyValuesFor.setStyleSheet("color: #565C63;")
 
@@ -220,6 +213,8 @@ class Ui_MainWindow(object):
 
         self.fileNames.setFont(font)
         self.fileNames.setStyleSheet("color: #565C63;")
+
+        self.title.setStyleSheet("color: #565C63;")
 
         self.windowSize.setFont(font)
         self.windowSize.setStyleSheet("color: #565C63;")
@@ -243,7 +238,25 @@ class Ui_MainWindow(object):
             background-color: #17191B;
         """)
 
+        self.menubar.setStyleSheet("""
+                   QMenuBar {
+                       background-color: #2D3235; /* Set menu bar background color */
+                   }
+                   QMenuBar::item {
+                       background-color: transparent; /* Set menu bar item background color */
+                       color: #DDDDDD; /* Set menu bar item text color */
+                   }
+                   QMenuBar::item:selected {
+                       background-color: #1E2123 /* Set menu bar item background color when selected */
+                   }
+                   QMenuBar::item:pressed {
+                       background-color: #1E2123; /* Set menu bar item background color when pressed */
+                   }
+               """)
+
         self.scrollArea.setStyleSheet("background-color: #17191B;")
+
+        self.title.setStyleSheet("background-color: #1B1D1F;")
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi

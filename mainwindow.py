@@ -1,14 +1,15 @@
 # This Python file uses the following encoding: utf-8
 import sys
 
-from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel
-from PySide6.QtCore import Slot, Qt
+from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QWidget
+from PySide6.QtCore import Slot, Qt, QPoint
 from ui_form import Ui_MainWindow
 
 
 from path_handler import PathHandler
 from ABP.time_domain import TimeDomain
 from ABP.frequency_domain import FrequencyDomain
+
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
@@ -24,6 +25,24 @@ class MainWindow(QMainWindow):
         self.label.setAlignment(Qt.AlignCenter)
         self.label.setStyleSheet("font-size: 20px;")
         self.ui.scrollArea.setWidget(self.label)
+        self.setWindowFlag(Qt.FramelessWindowHint)
+        self.old_pos = self.pos()
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.old_pos = event.globalPos()
+
+    def mouseMoveEvent(self, event):
+        if event.buttons() == Qt.LeftButton:
+            delta = QPoint(event.globalPos() - self.old_pos)
+            self.move(self.x() + delta.x(), self.y() + delta.y())
+            self.old_pos = event.globalPos()
+
+    def mouseReleaseEvent(self, event):
+        pass
+
+
+
 
     def buttons(self):
         self.pushButton = QPushButton(self.centralwidget)
