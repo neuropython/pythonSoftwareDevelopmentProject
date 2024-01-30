@@ -1,3 +1,4 @@
+
 # This Python file uses the following encoding: utf-8
 import sys
 import pandas as pd
@@ -16,44 +17,137 @@ from ABP.frequency_domain import FrequencyDomain
 
 
 class MainWindow(QMainWindow):
+    """
+    Parameters
+    ----------
+    parent :
+        (Default value = None)
+    Returns
+    -------
+    None
+    Method:
+    -------
+    __init__ - initialize the class.
+    buttons - connect the buttons.
+    check_values - check if the values are not empty.
+    download_data - download the data from the GUI.
+    connect_checkbox - connect the checkbox.
+    on_time_checkbox_state_changed - check if the time checkbox is checked.
+    on_frequency_checkbox_state_changed - check if the frequency checkbox is checked.
+    connect_action - connect the action.
+    save_to_file - save the data to the file.
+    navigate - navigate to the github page.
+    Parameters
+    ----------
+    """
     def __init__(self, parent=None):
+        """
+        Initialize the class.
+
+        Parameters
+        ----------
+        parent :
+            (Default value = None)
+        Returns
+        -------
+        None
+        """
         super().__init__(parent)
+
         self.centralwidget = None
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
         self.buttons()
         self.connect_checkbox()
         self.connect_action()
+
         self.to_analyze = []
+
         self.label = QLabel()
         self.label.setAlignment(Qt.AlignCenter)
+
         self.ui.scrollArea.setWidget(self.label)
+
         self.setWindowFlag(Qt.FramelessWindowHint)
+
         self.old_pos = self.pos()
+
         self.ui.actionSave_to_file.setDisabled(True)
 
     def mousePressEvent(self, event):
+        """
+        Parameters
+        ----------
+        event :
+        pos change
+        Returns
+        -------
+        None
+
+        """
         if event.button() == Qt.LeftButton:
             self.old_pos = event.globalPos()
 
     def mouseMoveEvent(self, event):
+        """
+        when pos changing
+        Parameters
+        ----------
+        event :
+        pos change
+        Returns
+        -------
+        None
+
+        """
         if event.buttons() == Qt.LeftButton:
             delta = QPoint(event.globalPos() - self.old_pos)
             self.move(self.x() + delta.x(), self.y() + delta.y())
             self.old_pos = event.globalPos()
 
     def mouseReleaseEvent(self, event):
+        """
+        when pos not changing
+        Parameters
+        ----------
+        event :
+        pos change
+        Returns
+        -------
+        None
+        """
         pass
 
 
 
 
     def buttons(self):
+        """
+        Connect the buttons
+
+        Parameters
+        ----------
+        self :
+        Returns
+        -------
+        None
+        """
         self.pushButton = QPushButton(self.centralwidget)
         self.pushButton = self.ui.analyze_button.clicked.connect(self.download_data)
         self.pushButton = self.ui.analyze_button.clicked.connect(self.check_values)
 
     def check_values(self):
+        """
+        Check if the values are not empty if not perrorms the analisys.
+
+        Parameters
+        ----------
+        self :
+        Returns
+        -------
+        None
+        """
         if (len(self.sampling_rate) == 0 or len(self.file_names) == 0 or len(self.window_size) == 0
                 or len(self.overlap) == 0 or len(self.path) == 0 or len(self.to_analyze) ==0 ):
             self.label.setText("Do not leave values empty")
@@ -114,6 +208,17 @@ class MainWindow(QMainWindow):
 
 
     def download_data(self):
+        """
+        Download the data from the GUI.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        None
+        """
+
         self.sampling_rate = self.ui.samplingRateEditTxt.toPlainText()
         self.file_names = self.ui.fileNamesEditTxt.toPlainText()
         self.window_size = self.ui.windowSizeEditTxt.toPlainText()
@@ -122,6 +227,17 @@ class MainWindow(QMainWindow):
 
 
     def connect_checkbox(self):
+        """
+        Connect the checkbox.
+
+        Parameters
+        ----------
+        self :
+        Returns
+        -------
+        None
+
+        """
         self.ui.time_checkbox.stateChanged.connect(self.on_time_checkbox_state_changed)
         self.ui.frequency_checkbox.stateChanged.connect(self.on_frequency_checkbox_state_changed)
 
@@ -132,17 +248,42 @@ class MainWindow(QMainWindow):
             self.to_analyze.remove("time")
 
     def on_frequency_checkbox_state_changed(self, state):
+        """
+        Check if the frequency checkbox is checked.
+
+        Parameters
+        ----------
+        state :bool - check if the checkbox is checked.
+        Returns
+        -------
+        None
+
+        """
         if state:
             self.to_analyze.append("frequency")
         else:
             self.to_analyze.remove("frequency")
 
     def connect_action(self):
+        """
+        Connect the action. And if action is triggered call the function.
+        """
         self.ui.actionClose.triggered.connect(self.close)
         self.ui.actionSave_to_file.triggered.connect(self.save_to_file)
         self.ui.menuHow_to_use.triggered.connect(self.navigate)
 
     def save_to_file(self):
+        """
+        Save the data to the file.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        None
+
+        """
         print("save to file")
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
@@ -152,6 +293,18 @@ class MainWindow(QMainWindow):
             f.write(self.label.text())
 
     def navigate(self):
+        """
+        Navigate to the github page.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+        None
+
+        """
+
         print("navigate")
         webbrowser.open(r"https://github.com/neuropython/pythonSoftwareDevelopmentProject/blob/main/README.md")
 
