@@ -1,8 +1,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/neuropython/pythonSoftwareDevelopmentProject/blob/main/icon.jpg?raw=true" alt="Logo" width="200" height="200">
   </a>
 
   <h3 align="center">GUI for analyzing large sets of data including ABP and ECG signals</h3>
