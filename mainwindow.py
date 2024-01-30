@@ -3,11 +3,12 @@ import sys
 import pandas as pd
 import time
 
-from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QWidget, QFileDialog
 from PySide6.QtCore import Slot, Qt, QPoint
 from ui_form import Ui_MainWindow
-import ast
 
+import ast
+import webbrowser
 
 from path_handler import PathHandler
 from ABP.time_domain import TimeDomain
@@ -29,6 +30,7 @@ class MainWindow(QMainWindow):
         self.ui.scrollArea.setWidget(self.label)
         self.setWindowFlag(Qt.FramelessWindowHint)
         self.old_pos = self.pos()
+        self.ui.actionSave_to_file.setDisabled(True)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -66,6 +68,8 @@ class MainWindow(QMainWindow):
              font-size: 20px;
              """)
 
+            self.ui.actionSave_to_file.setDisabled(False)
+
             # read the path and change it to the correct format
             path = self.path.replace("file:///", "")
             path = path.replace("/", "\\")
@@ -74,9 +78,16 @@ class MainWindow(QMainWindow):
             lst = ast.literal_eval(self.file_names)
 
             # create the path handler object
-            ph = PathHandler(path, lst)
-            founded_files = ph.all_alaized_files_names
-            signals = ph.signals
+            try:
+                ph = PathHandler(path, lst)
+                founded_files = ph.all_alaized_files_names
+                signals = ph.signals
+            except Exception as e:
+                self.label.setText(f"An error occurred: {e} - perhaps due to bad data format")
+                self.label.setStyleSheet("""
+                 color: #ff5757;
+                    font-size: 20px;
+                    """)
 
 
             self.label.setText("Founded files: \n" + "\n,".join([str(n) for n in founded_files]))
@@ -90,16 +101,12 @@ class MainWindow(QMainWindow):
                     if "time" in self.to_analyze:
                         td = TimeDomain(i)
                         current_text = current_text + f"Time domain: {td}" + "\n"
-                        df = pd.read_json(fd)
-                        print(df)
                 except Exception as e:
                      current_text = f"An error occurred with signal (name) {j}: {e}" + "\n"
                 try:
                     if "frequency" in self.to_analyze:
                         fd = FrequencyDomain(i, self.sampling_rate, self.window_size, self.overlap)
                         current_text = current_text + f"Frequency domain: {fd}" + "\n"
-                        df = pd.read_json(fd)
-                        print(df)
                 except Exception as e:
                     current_text = current_text + f"An error occurred with signal (name) {j}: {e}" + "\n"
 
@@ -133,11 +140,20 @@ class MainWindow(QMainWindow):
     def connect_action(self):
         self.ui.actionClose.triggered.connect(self.close)
         self.ui.actionSave_to_file.triggered.connect(self.save_to_file)
+        self.ui.menuHow_to_use.triggered.connect(self.navigate)
 
     def save_to_file(self):
         print("save to file")
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        file_name, _ = QFileDialog.getSaveFileName(self, "QFileDialog.getSaveFileName()", "",
+                                                  "All Files (*);;Text Files (*.txt)", options=options)
+        with open(file_name, "w") as f:
+            f.write(self.label.text())
 
-
+    def navigate(self):
+        print("navigate")
+        webbrowser.open(r"https://github.com/neuropython/pythonSoftwareDevelopmentProject/blob/main/README.md")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

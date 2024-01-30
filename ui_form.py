@@ -29,6 +29,8 @@ class Ui_MainWindow(object):
         MainWindow.resize(800, 765)
         self.actionClose = QAction(MainWindow)
         self.actionClose.setObjectName(u"actionClose")
+        self.actionHelp = QAction(MainWindow)
+        self.actionHelp.setObjectName(u"actionHelp")
         self.actionSave_to_file = QAction(MainWindow)
         self.actionSave_to_file.setObjectName(u"actionSave_to_file")
         self.centralwidget = QWidget(MainWindow)
@@ -115,6 +117,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHow_to_use.menuAction())
         self.menuAnalize.addAction(self.actionClose)
         self.menuAnalize.addAction(self.actionSave_to_file)
+        self.menuHow_to_use.addAction(self.actionHelp)
 
         self.retranslateUi(MainWindow)
 
@@ -263,6 +266,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"pyABP", None))
         self.actionClose.setText(QCoreApplication.translate("MainWindow", u"Close", None))
+        self.actionHelp.setText(QCoreApplication.translate("MainWindow", u"Help", None))
         self.actionSave_to_file.setText(QCoreApplication.translate("MainWindow", u"Save to file ", None))
         self.title.setText(QCoreApplication.translate("MainWindow", u"Brain Lab ABP analysis Software", None))
         self.plainTextEdit.setPlaceholderText(
