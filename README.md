@@ -93,6 +93,8 @@ after that if you want to use GUI run the mainwindow.py file
 
 pyHRV requires C++ installed - (wheel exeption if not C++)
 
+
+--DO DOKONCZENIA--
 ### Installation
 
 _Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
