@@ -1,5 +1,7 @@
 # This Python file uses the following encoding: utf-8
 import sys
+import pandas as pd
+import time
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QWidget
 from PySide6.QtCore import Slot, Qt, QPoint
@@ -72,10 +74,36 @@ class MainWindow(QMainWindow):
             lst = ast.literal_eval(self.file_names)
 
             # create the path handler object
-            founded_files = PathHandler(path, lst).all_alaized_names
+            ph = PathHandler(path, lst)
+            founded_files = ph.all_alaized_files_names
+            signals = ph.signals
 
-            self.label.setText("Founded files" + ", ".join([str(n) for n in founded_files]))
 
+            self.label.setText("Founded files: \n" + "\n,".join([str(n) for n in founded_files]))
+
+            time.sleep(5)
+
+            current_text = ""
+
+            for i,j in signals, founded_files:
+                try:
+                    if "time" in self.to_analyze:
+                        td = TimeDomain(i)
+                        current_text = current_text + f"Time domain: {td}" + "\n"
+                        df = pd.read_json(fd)
+                        print(df)
+                except Exception as e:
+                     current_text = f"An error occurred with signal (name) {j}: {e}" + "\n"
+                try:
+                    if "frequency" in self.to_analyze:
+                        fd = FrequencyDomain(i, self.sampling_rate, self.window_size, self.overlap)
+                        current_text = current_text + f"Frequency domain: {fd}" + "\n"
+                        df = pd.read_json(fd)
+                        print(df)
+                except Exception as e:
+                    current_text = current_text + f"An error occurred with signal (name) {j}: {e}" + "\n"
+
+            self.label.setText(current_text)
 
 
     def download_data(self):
