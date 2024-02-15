@@ -114,7 +114,7 @@ if you want you can store data
 <!-- CONTACT -->
 ## Contact
 
-Damian Pietroń - [LinkedIn](https://www.linkedin.com/in/damian-pietro%C5%84-36343826b/) - email@example.com
+Damian Pietroń - [LinkedIn](https://www.linkedin.com/in/damian-pietro%C5%84-36343826b/) - damianpietron007@gmail.com
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
